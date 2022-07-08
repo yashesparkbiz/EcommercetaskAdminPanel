@@ -1,0 +1,124 @@
+<div class="container-fluid">
+    <div class="card shadow border-0 mb-7">
+        <div class="card-header row">
+            <h5 class="mb-0 col-md-2">SubCategories List</h5>
+            <div class="col-md-2"><a href="#" class="btn d-inline-flex btn-sm btn-primary mx-1" data-bs-toggle="modal"
+                    data-bs-target="#SubCategoryModal"> <span class=" pe-2"> <i class="bi bi-plus"></i> </span>
+                    <span>Add</span> </a></div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">SubCategoryID</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="subcategoriesdata">
+                    <tr *ngFor="let subcategory of subcategoriesdata | async">
+                        <td> {{subcategory.id}} </td>
+                        <td> {{subcategory.name}} </td>
+                        <td> {{subcategory.categoryName}} </td>
+                        <td > 
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover"  (click)="setSubCategoryid(subcategory.id)"><i class="bi bi-pencil-square"></i></button> 
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover" (click)="deleteSubCategory(subcategory.id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer border-0 py-5"> </div>
+        <!-- <span class="text-muted text-sm">Showing 10 items out of 250 results found</span> -->
+    </div>
+</div>
+<!-- add category -->
+<div class="modal fade" id="SubCategoryModal" tabindex="-1" aria-labelledby="SubCategoryModalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="SubCategoryModalLabel">Create SubCategory</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <p class="text-danger">{{errorMessage}}</p>
+                    <p class="text-success">{{Message}}</p>
+                    <form style="margin:2%" [formGroup]="addSubCategoryForm" autocomplete="off" novalidate
+                        (ngSubmit)="addSubCategory(addSubCategoryForm.value)">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-5 font-weight-bold">SubCategory name :</div>
+                                <div class="col-md-7">
+                                    <input id="txtsubcategory" class="form-control" type="text" formControlName="name"
+                                        placeholder="enter subcategory name">
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-5 font-weight-bold">Select Category :</div>
+                                <div class="col-md-7">
+                                    <select id="ddlCategory" class="form-control" formControlName="categoryid">
+                                        <option value="0" selected>Select Category</option>
+                                        <option *ngFor="let category of categoriesdata | async" [value]="category.id">{{category.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3 text-center">
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- edit category-->
+<button id="openModalButton" data-bs-toggle="modal" data-bs-target="#updateSubCategoryModal" [hidden]="true"></button>
+<div class="modal fade" id="updateSubCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update SubCategory</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearmessages()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <p class="text-danger">{{errorMessage1}}</p>
+                    <p class="text-success">{{Message1}}</p>
+                    <form style="margin:2%" [formGroup]="updateSubCategoryForm" autocomplete="off" novalidate
+                        (ngSubmit)="editSubCategory(updateSubCategoryForm.value)">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-5 font-weight-bold">SubCategory name :</div>
+                                <div class="col-md-7">
+                                    <input id="txtsubcategory" class="form-control" type="text" formControlName="name"
+                                        placeholder="enter subcategory name">
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-5 font-weight-bold">Select Category :</div>
+                                <div class="col-md-7">
+                                    <select id="ddlCategory" class="form-control" formControlName="categoryid">
+                                        <option value="0" selected>Select Category</option>
+                                        <option *ngFor="let category of categoriesdata | async" [value]="category.id">{{category.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3 text-center">
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

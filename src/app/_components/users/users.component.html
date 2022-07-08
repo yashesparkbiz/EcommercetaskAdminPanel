@@ -1,0 +1,128 @@
+<div class="container-fluid">
+    <div class="card shadow border-0 mb-7">
+        <div class="card-header row">
+            <h5 class="mb-0 col-md-2">Users List</h5>
+            <!-- <div class="col-md-2"><a href="#" class="btn d-inline-flex btn-sm btn-primary mx-1" data-bs-toggle="modal"
+                    data-bs-target="#UserModal"> <span class=" pe-2"> <i class="bi bi-plus"></i> </span>
+                    <span>Add</span> </a>
+            </div> -->
+            <div class="col-md-2">
+                <select id="ddlrole" class="form-control" (onchange)="getuserrolewise()">
+                    <option selected value="0">All</option>
+                    <option value="1">Customer</option>
+                    <option value="2">Seller</option>
+                    <option value="3">Admin</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="userdata">
+                    <tr *ngFor="let user of userdata | async">
+                        <td> {{user.id}} </td>
+                        <td> {{user.userName}} </td>
+                        <td> {{user.email}}</td>
+                        <td> {{user.age}}</td>
+                        <td> {{user.gender}}</td>
+                        <td> 
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover"  (click)="setuserid(user.id)"><i class="bi bi-pencil-square"></i></button> 
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover" (click)="deleteuser(user.id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer border-0 py-5"> </div>
+        <!-- <span class="text-muted text-sm">Showing 10 items out of 250 results found</span> -->
+    </div>
+</div>
+<!-- edit user-->
+<button id="openModalButton" data-bs-toggle="modal" data-bs-target="#updateUserModal" [hidden]="true"></button>
+<div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clearmessages()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <p class="text-danger">{{errorMessage1}}</p>
+                    <p class="text-success">{{Message1}}</p>
+                    <form [formGroup]="updateUserForm" autocomplete="off" novalidate (ngSubmit)="editUser(updateUserForm.value)">
+                        <div class="mb-3 row">
+                            <label for="firstName" class="col-form-label col-md-4">UserName:</label>
+                            <div class="col-md-8">
+                                <input type="text" id="userName" formControlName="userName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="email" class="col-form-label col-md-4">Email:</label>
+                            <div class="col-md-8">
+                                <input type="email" id="email" formControlName="email" class="form-control" />
+                            </div>
+                            <!-- <div class="col-md-5">
+                                <em *ngIf="validateControl('email') && hasError('email', 'email')">Please provide a valid
+                                    email</em>
+                                <em *ngIf="validateControl('email') && hasError('email', 'required')">Email is required</em>
+                            </div> -->
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="phoneNumber" class="col-form-label col-md-4">PhoneNumber:</label>
+                            <div class="col-md-8">
+                                <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="age" class="col-form-label col-md-4">Age:</label>
+                            <div class="col-md-8">
+                                <input type="number" id="age" formControlName="age" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="gender" class="col-form-label col-md-4">Gender:</label>
+                            <div class="col-md-8">
+                                <input type="radio" name="gender" value="male" formControlName="gender"> Male &nbsp;&nbsp;
+                                <input type="radio" name="gender" value="female" formControlName="gender"> Female &nbsp;&nbsp;
+                                <input type="radio" name="gender" value="other" formControlName="gender"> Other
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="password" class="col-form-label col-md-4">Password:</label>
+                            <div class="col-md-8">
+                                <input type="password" id="password" formControlName="password" class="form-control" />
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <em *ngIf="validateControl('password') && hasError('password', 'required')">Password is required</em> -->
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="confirmPassword" class="col-form-label col-md-4">Confirm Password:</label>
+                            <div class="col-md-8">
+                                <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" />
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3 row">
+                            <div class="col-md-1">
+                                <button type="submit" class="btn btn-info" >Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
