@@ -1,0 +1,147 @@
+<div class="container-fluid">
+    <div class="card shadow border-0 mb-7">
+        <div class="card-header row">
+            <h5 class="mb-0 col-md-2">Products List</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">price</th>
+                        <th scope="col">product_subcategory_id</th>
+                        <th scope="col">quantity</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="productdata">
+                    <tr *ngFor="let product of productdata | async">
+                        <td> {{product.id}} </td>
+                        <td> {{product.image}}</td>
+                        <td> {{product.product_Name}} </td>
+                        <td> {{product.description}}</td>
+                        <td> {{product.brand}}</td>
+                        <td> {{product.price}}</td>
+                        <td> {{product.product_Subcategory_Id}}</td>
+                        <td> {{product.quantity}}</td>
+                        <td> {{product.user_Id}}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover"
+                                (click)="setproductid(product.id)"><i class="bi bi-pencil-square"></i></button>
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover"
+                                (click)="deleteproduct(product.id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer border-0 py-5"> </div>
+        <!-- <span class="text-muted text-sm">Showing 10 items out of 250 results found</span> -->
+    </div>
+</div>
+<!-- edit product-->
+<button id="openModalButton" data-bs-toggle="modal" data-bs-target="#updateProductModal" [hidden]="true"></button>
+<div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="clearmessages()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <p class="text-danger">{{errorMessage1}}</p>
+                    <p class="text-success">{{Message1}}</p>
+                    <form style="margin:2%" [formGroup]="editProductForm" autocomplete="off" novalidate
+                        (ngSubmit)="editProduct(editProductForm.value)">
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Product name :</div>
+                                <div class="col-md-8">
+                                    <input id="txtproduct" class="form-control" type="text"
+                                        formControlName="product_Name" placeholder="enter product name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Description :</div>
+                                <div class="col-md-8">
+                                    <input id="txtdescription" class="form-control" rows="3"
+                                        formControlName="description" placeholder="enter description">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Company :</div>
+                                <div class="col-md-8">
+                                    <input id="txtbrand" type="multiline" class="form-control" formControlName="brand"
+                                        placeholder="enter company">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Price :</div>
+                                <div class="col-md-8">
+                                    <input id="txtprice" type="multiline" class="form-control" formControlName="price"
+                                        placeholder="enter price">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Select Category :</div>
+                                <div class="col-md-8">
+                                    <select id="ddlCategory" class="form-control" (change)="changeCategory($event)">
+                                        <option value="0">Select Category</option>
+                                        <option *ngFor="let category of categoriesdata | async" [value]="category.id">
+                                            {{category.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Select SubCategory :</div>
+                                <div class="col-md-8" *ngIf="subcategoriesdata">
+                                    <select id="inputState subcategoryid" class="form-control"
+                                        formControlName="product_Subcategory_Id">
+                                        <option default value="0">Choose SubCategory</option>
+                                        <option *ngFor="let subcategory of subcategoriesdata" [value]="subcategory.id">
+                                            {{subcategory.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8" *ngIf="!subcategoriesdata">
+                                    <select id="inputState subcategoryid" class="form-control"
+                                        *ngIf="!subcategoriesdata">
+                                        <option default value="0">Choose SubCategory</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Quantity :</div>
+                                <div class="col-md-8 row">
+                                    <div class="col-md-8"><input id="txtquantity" class="form-control" rows="3"
+                                            type="number" formControlName="quantity" placeholder="enter quantity"></div>
+                                    <div class="col-md-2">pcs</div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 font-weight-bold">Image :</div>
+                                <div class="col-md-8">
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1"
+                                        formControlName="image" placeholder="Choose File">
+                                </div>
+                            </div>
+                            <div class="row mb-3 ">
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div class="card shadow border-0 mb-7">
+        <div class="card-header row">
+            <h5 class="mb-0 col-md-2">Orders List</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">total_amount</th>
+                        <th scope="col">total_discount</th>
+                        <th scope="col">user_Id</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="orderdata">
+                    <tr *ngFor="let order of orderdata | async">
+                        <td> {{order.id}} </td>
+                        <td> {{order.total_Amount}}</td>
+                        <td> {{order.total_Discount}} </td>
+                        <td> {{order.user_Id}}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover"
+                                (click)="viewOrder(order.id)"><i class="bi bi-eye"></i></button>
+                            <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover"
+                                (click)="deleteOrder(order.id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer border-0 py-5"> </div>
+         <!-- <span class="text-muted text-sm">Showing 10 items out of 250 results found</span>  -->
+    </div>
+</div>
+<!-- view order-->
+<button id="openModalButton" data-bs-toggle="modal" data-bs-target="#vieworder" [hidden]="true"></button>
+<div class="modal fade" id="vieworder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">View Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btnclose"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-nowrap">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">image</th>
+                                    <th scope="col">product_Name</th>
+                                    <th scope="col">quantity</th>
+                                    <th scope="col">order_Id</th>
+                                    <th scope="col">status</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="orderdetailsdata">
+                                <tr *ngFor="let orderdetail of orderdetailsdata">
+                                    <td> {{orderdetail.id}} </td>
+                                    <td> {{orderdetail.image}}</td>
+                                    <td> {{orderdetail.product_Name}} </td>
+                                    <td> {{orderdetail.quantity}}</td>
+                                    <td> {{orderdetail.order_Id}}</td>
+                                    <td> {{orderdetail.status}}</td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

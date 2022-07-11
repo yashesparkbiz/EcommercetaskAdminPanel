@@ -36,4 +36,8 @@ export class SubcategoriesService {
   getbyid(id: number) : Observable<Subcategories>{
     return this.http.get<Subcategories>("https://localhost:7180/ProductSubCategory/get-product-subcategorybyid/"+id, { headers: this.headers })
   }
+
+  getbycategoryid(categoryid:number) : Observable<Array<Subcategories>> {
+    return this.http.get<Array<Subcategories>>("https://localhost:7180/ProductSubCategory/get-product-subcategorybycategoryid/"+categoryid, { headers: this.headers });
+  }
 }

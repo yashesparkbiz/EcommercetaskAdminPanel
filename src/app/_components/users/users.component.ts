@@ -96,7 +96,15 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  getuserrolewise(){
-    
+  getuserrolewise(role:string){
+    // alert(role);
+    if(role == '0')
+    {
+      this.getallUsers();
+    }
+    // else if(role == '1')
+    // {
+
+    // }
   }
 }

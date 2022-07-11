@@ -11,12 +11,17 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SubcategoriesComponent } from './_components/subcategories/subcategories.component';
 import { UsersComponent } from './_components/users/users.component';
+import { ProductsComponent } from './_components/products/products.component';
+import { OrdersComponent } from './_components/orders/orders.component';
+import { LoginComponent } from './_components/login/login.component';
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'categories', component: CategoriesComponent },
   { path: 'subcategories', component: SubcategoriesComponent },
-  { path: 'users', component: UsersComponent }
+  { path: 'users', component: UsersComponent },
+  { path: 'products', component:ProductsComponent},
+  { path: 'orders', component:OrdersComponent}
 ];
 
 @NgModule({
@@ -27,7 +32,10 @@ const appRoutes: Routes = [
     HeaderComponent,
     CategoriesComponent,
     SubcategoriesComponent,
-    UsersComponent
+    UsersComponent,
+    ProductsComponent,
+    OrdersComponent,
+    LoginComponent
   ],
   imports: [
     FormsModule,

@@ -7,8 +7,8 @@
                     <span>Add</span> </a>
             </div> -->
             <div class="col-md-2">
-                <select id="ddlrole" class="form-control" (onchange)="getuserrolewise()">
-                    <option selected value="0">All</option>
+                <select id="ddlrole" #ddlrole class="form-control" (change)="getuserrolewise(ddlrole.value)">
+                    <option default value="0">All</option>
                     <option value="1">Customer</option>
                     <option value="2">Seller</option>
                     <option value="3">Admin</option>
@@ -117,7 +117,7 @@
                         <br>
                         <div class="mb-3 row">
                             <div class="col-md-1">
-                                <button type="submit" class="btn btn-info" >Update</button>
+                                <button type="submit" class="btn btn-info">Update</button>
                             </div>
                         </div>
                     </form>
