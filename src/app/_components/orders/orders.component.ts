@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { Order } from 'src/app/_models/order';
 import { Orderdetail } from 'src/app/_models/orderdetail';
@@ -14,14 +15,19 @@ export class OrdersComponent implements OnInit {
   orderdata!: Observable<Array<Order>>;
   orderdetailsdata!: Array<Orderdetail>;
   delorderdetailsdata!: Array<Orderdetail>;
-  constructor(private ordersService: OrdersService, private orderdetailsService: OrderdetailsService) { }
+  constructor(private ordersService: OrdersService, private orderdetailsService: OrderdetailsService, public router: Router) { }
 
   ngOnInit(): void {
     this.getorderdata();
   }
 
   getorderdata() {
-    this.orderdata = this.ordersService.get();
+    if (localStorage.getItem('token')?.toString() != undefined && localStorage.getItem('token')?.toString() != "") {
+      this.orderdata = this.ordersService.get();
+    }
+    else {
+      this.router.navigate(['login']);
+    }
   }
 
   viewOrder(id: number) {

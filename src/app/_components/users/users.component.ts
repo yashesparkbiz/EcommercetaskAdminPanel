@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UsersModel } from 'src/app/_interfaces/user-model';
 import { User } from 'src/app/_models/user';
@@ -18,20 +19,25 @@ export class UsersComponent implements OnInit {
   Message1: string = '';
   updateUserForm!: FormGroup;
 
-  constructor(private userservice: UsersService) { }
+  constructor(private userservice: UsersService, private router: Router) { }
 
   ngOnInit(): void {
-    this.updateUserForm = new FormGroup({
-      userName: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phoneNumber: new FormControl(''),
-      gender: new FormControl(''),
-      age: new FormControl(''),
-      password: new FormControl('', [Validators.required]),
-      confirmPassword: new FormControl('')
-    });
+    if (localStorage.getItem('token')?.toString() != undefined && localStorage.getItem('token')?.toString() != "") {
+      this.updateUserForm = new FormGroup({
+        userName: new FormControl('', [Validators.required]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        phoneNumber: new FormControl(''),
+        gender: new FormControl(''),
+        age: new FormControl(''),
+        password: new FormControl('', [Validators.required]),
+        confirmPassword: new FormControl('')
+      });
 
-    this.getallUsers();
+      this.getallUsers();
+    }
+    else {
+      this.router.navigate(['login']);
+    }
   }
 
   getallUsers() {
@@ -96,15 +102,7 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  getuserrolewise(role:string){
-    // alert(role);
-    if(role == '0')
-    {
-      this.getallUsers();
-    }
-    // else if(role == '1')
-    // {
-
-    // }
+  getuserrolewise(role: string) {
+    this.userdata = this.userservice.getbyrole(role);
   }
 }

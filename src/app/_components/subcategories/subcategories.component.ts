@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SubCategory } from 'src/app/_interfaces/sub-category';
 import { Categories } from 'src/app/_models/categories.model';
@@ -13,58 +14,61 @@ import { SubcategoriesService } from 'src/app/_services/subcategories.service';
   styleUrls: ['./subcategories.component.css']
 })
 export class SubcategoriesComponent implements OnInit {
-  
-  subcategoriesdata!:Observable<Subcategorieswithcategoryname[]>;
+
+  subcategoriesdata!: Observable<Subcategorieswithcategoryname[]>;
   errorMessage: string = '';
   Message: string = '';
   errorMessage1: string = '';
   Message1: string = '';
-  addSubCategoryForm!:FormGroup;
-  updateSubCategoryForm!:FormGroup;
+  addSubCategoryForm!: FormGroup;
+  updateSubCategoryForm!: FormGroup;
   categoriesdata!: Observable<Categories[]>;
-  subcategory!:Subcategories;
+  subcategory!: Subcategories;
 
-  constructor(private subcategoriesService:SubcategoriesService, private categoriesService:CategoriesService) { }
+  constructor(private subcategoriesService: SubcategoriesService, private categoriesService: CategoriesService, private router: Router) { }
 
   ngOnInit(): void {
-    this.addSubCategoryForm = new FormGroup({
-      name: new FormControl(''),
-      categoryid: new FormControl('')
-    });
+    if (localStorage.getItem('token')?.toString() != undefined && localStorage.getItem('token')?.toString() != "") {
+      this.addSubCategoryForm = new FormGroup({
+        name: new FormControl(''),
+        categoryid: new FormControl('')
+      });
 
-    this.updateSubCategoryForm = new FormGroup({
-      name: new FormControl(''),
-      categoryid: new FormControl('')
-    });
+      this.updateSubCategoryForm = new FormGroup({
+        name: new FormControl(''),
+        categoryid: new FormControl('')
+      });
 
-    this.getSubcategoriesdata();
-    this.getcategorydata();
+      this.getSubcategoriesdata();
+      this.getcategorydata();
+    }
+    else {
+      this.router.navigate(['login']);
+    }
   }
 
   async getcategorydata() {
     this.categoriesdata = this.categoriesService.get();
   }
 
-  getSubcategoriesdata()
-  {
+  getSubcategoriesdata() {
     this.subcategoriesdata = this.subcategoriesService.getAll();
   }
 
-  async setSubCategoryid(id:number){
-    await this.subcategoriesService.getbyid(id).subscribe(res=>{
+  async setSubCategoryid(id: number) {
+    await this.subcategoriesService.getbyid(id).subscribe(res => {
       this.subcategory = res;
       this.callmodel(res);
     });
   }
 
-  callmodel(data:Subcategories)
-  {
+  callmodel(data: Subcategories) {
     this.updateSubCategoryForm.controls["name"].setValue(data.name);
     this.updateSubCategoryForm.controls["categoryid"].setValue(data.categoryid);
     document.getElementById('openModalButton')?.click();
   }
 
-  editSubCategory(data:any){
+  editSubCategory(data: any) {
     if (data.name == '' || data.name == null || data.name == undefined || data.categoryid == 0) {
       this.errorMessage1 += "- Please enter subcategory name ";
     }
@@ -83,7 +87,7 @@ export class SubcategoriesComponent implements OnInit {
     }
   }
 
-  deleteSubCategory(id:number){
+  deleteSubCategory(id: number) {
     var check = confirm('Are you sure you want to delete Category?');
     if (check == true) {
       this.subcategoriesService.delete(id).subscribe(res => {
@@ -95,15 +99,15 @@ export class SubcategoriesComponent implements OnInit {
     }
   }
 
-  addSubCategory(data:any){
-    if(data != undefined || data != null || data.name != "" || data.categoryid>0 )
-    {
-      var subcategorydata: SubCategory = { in : {
-        id: 0,
-        name: data.name,
-        categoryid: data.categoryid
+  addSubCategory(data: any) {
+    if (data != undefined || data != null || data.name != "" || data.categoryid > 0) {
+      var subcategorydata: SubCategory = {
+        in: {
+          id: 0,
+          name: data.name,
+          categoryid: data.categoryid
+        }
       }
-    }
       this.subcategoriesService.add(subcategorydata).subscribe(res => {
         alert(res);
         this.Message += "- data added successfully";
@@ -113,8 +117,7 @@ export class SubcategoriesComponent implements OnInit {
     }
   }
 
-  clearmessages()
-  {
+  clearmessages() {
     this.errorMessage1 = "";
     this.Message1 = "";
   }

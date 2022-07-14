@@ -84,6 +84,11 @@ export class LoginComponent implements OnInit {
       })
   }
 
+  public logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+  }
+
   getuserbyemail(email: string) {
     this.authService.getuserbyemail(email).subscribe(data => {
       localStorage.setItem("id", data.id.toString());

@@ -27,17 +27,22 @@ export class ProductsComponent implements OnInit {
   constructor(private productsService: ProductsService, private subcategoriesService: SubcategoriesService, private categoriesService: CategoriesService, private router: Router) { }
 
   ngOnInit(): void {
-    this.editProductForm = new FormGroup({
-      product_Name: new FormControl(''),
-      description: new FormControl(''),
-      brand: new FormControl(''),
-      price: new FormControl(''),
-      product_Subcategory_Id: new FormControl(''),
-      quantity: new FormControl(''),
-      image: new FormControl('')
-    });
-    this.getcategorydata(); 
-    this.getallproducts();
+    if (localStorage.getItem('token')?.toString() != undefined && localStorage.getItem('token')?.toString() != "") {
+      this.editProductForm = new FormGroup({
+        product_Name: new FormControl(''),
+        description: new FormControl(''),
+        brand: new FormControl(''),
+        price: new FormControl(''),
+        product_Subcategory_Id: new FormControl(''),
+        quantity: new FormControl(''),
+        image: new FormControl('')
+      });
+      this.getcategorydata();
+      this.getallproducts();
+    }
+    else {
+      this.router.navigate(['login']);
+    }
   }
 
   async getallproducts() {
@@ -95,7 +100,7 @@ export class ProductsComponent implements OnInit {
 
   editProduct(data: any) {
     debugger
-    if (data.product_Name != "" && data.description != "" && data.brand != "" &&  data.quantity > 0) {
+    if (data.product_Name != "" && data.description != "" && data.brand != "" && data.quantity > 0) {
       const productdata: Product =
       {
         id: (Number)(this.product.id),

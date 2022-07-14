@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/_interfaces/category';
 import { Categories } from 'src/app/_models/categories.model';
@@ -18,21 +19,26 @@ export class CategoriesComponent implements OnInit {
   Message: string = '';
   errorMessage1: string = '';
   Message1: string = '';
-  category!:Categories;
+  category!: Categories;
   updateCategoryForm!: FormGroup;
 
-  constructor(private categoriesService: CategoriesService) { }
+  constructor(private categoriesService: CategoriesService, public router: Router) { }
 
   ngOnInit(): void {
-    this.addCategoryForm = new FormGroup({
-      name: new FormControl('')
-    });
+    if (localStorage.getItem('token')?.toString() != undefined && localStorage.getItem('token')?.toString() != "") {
+      this.addCategoryForm = new FormGroup({
+        name: new FormControl('')
+      });
 
-    this.updateCategoryForm = new FormGroup({
-      name: new FormControl('')
-    });
+      this.updateCategoryForm = new FormGroup({
+        name: new FormControl('')
+      });
 
-    this.getcategorydata();
+      this.getcategorydata();
+    }
+    else {
+      this.router.navigate(['login']);
+    }
   }
 
   getcategorydata() {
@@ -93,15 +99,14 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  async setcategoryid(id:number){
-    await this.categoriesService.getbyid(id).subscribe(res=>{
+  async setcategoryid(id: number) {
+    await this.categoriesService.getbyid(id).subscribe(res => {
       this.category = res;
       this.callmodel(res);
     });
   }
 
-  callmodel(data:Categories)
-  {
+  callmodel(data: Categories) {
     this.updateCategoryForm.controls["name"].setValue(data.name);
     document.getElementById('openModalButton')?.click();
   }

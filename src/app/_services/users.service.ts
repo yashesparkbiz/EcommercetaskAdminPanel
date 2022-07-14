@@ -30,4 +30,8 @@ export class UsersService {
   Update(body: User){
     return this.http.put("https://localhost:7180/Users/update-user", JSON.stringify(body),{headers:this.headers});
   }
+
+  getbyrole(role:string): Observable<Array<User>>{
+    return this.http.get<Array<User>>("https://localhost:7180/Users/get-user-byrole/"+role,{headers: this.headers});
+  }
 }
